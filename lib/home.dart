@@ -11,9 +11,9 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   FlutterBlue flutterBlue = FlutterBlue.instance;
 
-  List<ScanResult> scanResultList = [];
+  List<ScanResult> scanResultList = []; // array to store our scan results;
 
-  bool _isScanning = false;
+  bool _isScanning = false; // boolean value to check the scanning status;
 
   @override
   initState() {
@@ -21,6 +21,7 @@ class _MyHomePageState extends State<MyHomePage> {
     initBle();
   }
 
+  // instantancitaing the flutter blue object;
   void initBle() {
     flutterBlue.isScanning.listen((isScanning) {
       _isScanning = isScanning;
@@ -30,20 +31,22 @@ class _MyHomePageState extends State<MyHomePage> {
 
   scan() async {
     if (!_isScanning) {
-      scanResultList.clear();
+      scanResultList.clear(); // clearing previously stored results (if any);
 
-      flutterBlue.startScan(timeout: Duration(seconds: 4));
+      flutterBlue.startScan(
+          timeout: Duration(seconds: 4)); // scans for four seconds;
 
       flutterBlue.scanResults.listen((results) {
         scanResultList = results;
 
-        setState(() {});
+        setState(() {}); // setting state;
       });
     } else {
-      flutterBlue.stopScan();
+      flutterBlue.stopScan(); // stops scan when isScanning is true;
     }
   }
 
+  // helper function to generate listtiles;
   Widget listItem(ScanResult r) {
     return ListTile(
       leading: CircleAvatar(child: Icon(Icons.bluetooth)),
@@ -62,7 +65,7 @@ class _MyHomePageState extends State<MyHomePage> {
         child: ListView.separated(
           itemCount: scanResultList.length,
           itemBuilder: (context, index) {
-            return listItem(scanResultList[index]);
+            return listItem(scanResultList[index]); // generic list bulilder;
           },
           separatorBuilder: (BuildContext context, int index) {
             return Divider();
